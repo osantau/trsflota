@@ -31,7 +31,9 @@ class m251017_181909_modify_documento_transport_order extends Migration
         ALTER TABLE `trsflota`.`user` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
         ALTER TABLE `trsflota`.`vehicle` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
         ALTER TABLE `transport_order` CHANGE `dateordered` `dateordered` DATE NULL DEFAULT NULL;
-        update invoice i set partner_id  = (select id from partner where trim(name)=trim(i.partener));
+        update `trsflota`.`invoice` i set partner_id  = (select id from partner where trim(name)=trim(i.partener));
+        update `trsflota`.`payment`  set nr_cmd_trs = replace(nr_cmd_trs,'.0','')  where nr_cmd_trs like '%.0%'; 
+        update `trsflota`.`payment`  set nr_factura = replace(nr_factura,'.0','')  where nr_factura like '%.0%'; 
         ");      
     }
 
