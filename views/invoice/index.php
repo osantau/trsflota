@@ -131,6 +131,9 @@ $baseUrl = Url::base(true);
 </div>
 <?php
 $this->registerJs(<<<JS
+$.ajaxSetup({
+  headers: { 'X-CSRF-Token': yii.getCsrfToken() }
+});
 $(document).ready(function() {
     const moneda = $('#moneda').val();  
     const baseUrl = $('#baseUrl').val();
@@ -139,7 +142,10 @@ $(document).ready(function() {
         const colName = $(this).text().trim();
         let input = '';
         if (colName === 'Data Factura' || colName === 'Data Scadenta') {
-            input = '<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+'" />';
+            input = '<div style="display:flex; flex-direction:column;">'
+            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' From" />'
+            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' To" />'
+            +'</div>';
         } else if (colName === 'Partener') {
             input = '<input type="text" class="form-control form-control-sm column-filter" placeholder="Caută partener..." />';
         } else {
@@ -212,8 +218,10 @@ $(document).ready(function() {
         serverSide: true,
         ajax:{ url: baseUrl + '/invoice/data?moneda=' + moneda,
              data: function(d){
-             d.dateinvoiced = $('input.column-filter[placeholder="Data Factura"]').val();
-             d.duedate = $('input.column-filter[placeholder="Data Scadenta"]').val();
+             d.dateinvoiced_from = $('input.column-filter[placeholder="Data Factura From"]').val();
+             d.dateinvoiced_to = $('input.column-filter[placeholder="Data Factura To"]').val();
+             d.duedate_from = $('input.column-filter[placeholder="Data Scadenta From"]').val();
+             d.duedate_to = $('input.column-filter[placeholder="Data Scadenta To"]').val();
              d.partener = $('input.column-filter[placeholder="Caută partener..."]').val();
           }
         },
@@ -250,9 +258,17 @@ $(document).ready(function() {
             btn.prop('disabled', false).html('<i class="fa fa-sync"></i> Reîncarcă');
         }, false);
     });
-  $(document).on('change keyup', '.column-filter', function() {
+      // Debounce helper
+    function debounce(fn, delay) {
+        let timeout;
+        return function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(fn.bind(this), delay);
+        }
+    }
+  $(document).on('change keyup', '.column-filter', debounce(function() {
         table.ajax.reload();
-    });
+    },400));
     // Inline editing (same as before)
     const editableColumns = {        
         'dateinvoiced': 'date',
@@ -306,7 +322,7 @@ $(document).ready(function() {
             $.ajax({
                 url: baseUrl + '/invoice/update-inline',
                 type: 'POST',
-                data: { id: id, field: 'combined_all', value: payload, _csrf: yii.getCsrfToken() },
+                data: { id: id, field: 'combined_all', value: payload },
                 success: function(res) {
                     if (res.success) {
                         table.ajax.reload(null, false);
@@ -347,8 +363,7 @@ $(document).ready(function() {
                     data: {
                         id: rowData.id,
                         field: colName,
-                        value: newValue,
-                        _csrf: yii.getCsrfToken()
+                        value: newValue
                     },
                     success: function(res) {
                         if (res.success) {
@@ -376,7 +391,7 @@ $(document).ready(function() {
         $.ajax({
             url: baseUrl + '/invoice/duplicate',
             type: 'POST',
-            data: { id: id, _csrf: yii.getCsrfToken() },
+            data: { id: id },
             success: function(response) {
                 if (response.success) {
                     alert('Factura a fost duplicată cu succes.');
@@ -398,7 +413,7 @@ $(document).ready(function() {
         $.ajax({
             url: baseUrl + '/invoice/delete',
             type: 'POST',
-            data: { id: id, _csrf: yii.getCsrfToken() },
+            data: { id: id },
             success: function(response) {
                 if (response.success) {
                     alert('Factura a fost ștearsă cu succes.');

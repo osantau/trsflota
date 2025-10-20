@@ -193,12 +193,22 @@ class InvoiceController extends Controller
         $partener = $request->get('partener');  
         $query = Invoice::find()->where(['=', 'moneda', $moneda]);      
                  //apply filters 
-         if (!empty($dateinvoiced)) {
-        $query->andWhere(['dateinvoiced' => $dateinvoiced]);
-    }
-    if (!empty($duedate)) {
-        $query->andWhere(['duedate' => $duedate]);
-    }
+        $dateInvFrom = Yii::$app->request->get('dateinvoiced_from');
+        $dateInvTo   = Yii::$app->request->get('dateinvoiced_to');
+         if ($dateInvFrom) {
+                $query->andWhere(['>=','dateinvoiced' , $dateInvFrom]);
+            }
+        if ($dateInvTo) {
+                $query->andWhere(['<=','dateinvoiced' , $dateInvTo]);
+            }             
+        $dateDueFrom = Yii::$app->request->get('duedate_from');
+        $dateDueTo   = Yii::$app->request->get('duedate_to');
+         if ($dateDueFrom) {
+                $query->andWhere(['>=','duedate', $dateDueFrom]);
+            }
+        if ($dateDueTo) {
+                $query->andWhere(['<=','duedate' , $dateDueTo]);
+            } 
     if (!empty($partener)) {
         $query->andFilterWhere(['like', 'partener', $partener]);
     }
