@@ -4,9 +4,10 @@ use yii\bootstrap5\Modal;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+$baseUrl = Url::base(true);
 // Register DataTables assets from CDN
-$this->registerCssFile('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css');
-$this->registerJsFile('https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerCssFile($baseUrl.'/dataTables/1.13.6/css/jquery.dataTables.min.css');
+$this->registerJsFile($baseUrl.'/dataTables/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 // $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css');
 // $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 $this->registerCss(" 
@@ -113,7 +114,7 @@ var table=  $('#vehicleTable').DataTable({
         scrollX:true,
         pageLength:25,
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json',
+            url: baseUrl+'dataTables/1.13.6/i18n/ro.json',
              /*search: "<span class='me-2'>🔍 Cautare:</span>",
              lengthMenu: "Afisare <strong>_MENU_</strong> inregistrari",
              info: "Afisare _START_ din _END_ din _TOTAL_ inregistrari",

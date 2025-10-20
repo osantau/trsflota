@@ -2,9 +2,9 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-
-$this->registerCssFile('https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css');
-$this->registerJsFile('https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$baseUrl = Url::base(true);
+$this->registerCssFile($baseUrl.'/dataTables/1.13.6/css/jquery.dataTables.min.css');
+$this->registerJsFile($baseUrl.'/dataTables/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 $this->registerCss("
  .dataTable tbody tr {
         transition: filter 0.25s ease-in-out;
@@ -26,7 +26,7 @@ $this->registerCss("
             "
 );
 $this->title = 'Plati Parteneri';
-$baseUrl = Url::base(true);
+
 ?>
 <div class="payment-index">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -140,7 +140,7 @@ $(document).ready(function() {
         pageLength: 25,
         order: [[1, 'desc']],
         language: {
-            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json'
+            url: baseUrl+'/dataTables/1.13.6/i18n/ro.json'
         },
         rowCallback: function(row, data) {
         $(row).removeClass('status-paid status-pending');
