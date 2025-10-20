@@ -122,7 +122,7 @@ var table=  $('#vehicleTable').DataTable({
         scrollX:true,
         pageLength:25,
         language: {
-            url: baseUrl+'dataTables/1.13.6/i18n/ro.json',
+            url: baseUrl+'/dataTables/1.13.6/i18n/ro.json',
              /*search: "<span class='me-2'>🔍 Cautare:</span>",
              lengthMenu: "Afisare <strong>_MENU_</strong> inregistrari",
              info: "Afisare _START_ din _END_ din _TOTAL_ inregistrari",
