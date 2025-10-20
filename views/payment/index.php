@@ -67,6 +67,11 @@ $baseUrl = Url::base(true);
 </div>
 <?php
 $this->registerJs(<<<JS
+
+$.ajaxSetup({
+  headers: { 'X-CSRF-Token': yii.getCsrfToken() }
+});
+
 $(document).ready(function() {
     const baseUrl = '$baseUrl';
         $('#paymentTable thead').append('<tr class="filter-row"></tr>');
@@ -74,7 +79,10 @@ $(document).ready(function() {
         const colName = $(this).text().trim();
         let input = '';
         if (colName === 'Data Factura' || colName === 'Data Scadenta') {
-            input = '<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+'" />';
+            input = '<div style="display:flex; flex-direction:column;">'
+            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' From" />'
+            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' To" />'
+            +'</div>';
         } else if (colName === 'FURNIZOR') {
             input = '<input type="text" class="form-control form-control-sm column-filter" placeholder="Caută partener..." />';
         } else {
@@ -87,8 +95,12 @@ $(document).ready(function() {
         serverSide: true,
         ajax:{url: baseUrl + '/payment/data',
           data: function(d){
-             d.dateinvoiced = $('input.column-filter[placeholder="Data Factura"]').val();
-             d.duedate = $('input.column-filter[placeholder="Data Scadenta"]').val();
+             d.dateinvoiced_from = $('input.column-filter[placeholder="Data Factura From"]').val();
+             d.dateinvoiced_to = $('input.column-filter[placeholder="Data Factura To"]').val();
+             d.duedate_from = $('input.column-filter[placeholder="Data Scadenta From"]').val();
+             d.duedate_to = $('input.column-filter[placeholder="Data Scadenta To"]').val();
+            // d.payate_from = $('input.column-filter[placeholder="Data Achitarii From"]').val();
+            // d.paydate_to = $('input.column-filter[placeholder="Data Achitarii To"]').val();
              d.partener = $('input.column-filter[placeholder="Caută partener..."]').val();
           }
         }, // server-side URL
@@ -110,7 +122,7 @@ $(document).ready(function() {
             { data : 'sold_eur' },
             { data : 'ron', orderable:false },
             { data : 'eur', orderable:false },
-            { data : 'paymentdate', orderable:false },
+            { data : 'paymentdate', orderable:true },
             { data : 'bank', orderable:false },
             { data : 'mentiuni', orderable:false },
             { data : 'status',orderable:false },
@@ -144,9 +156,19 @@ $(document).ready(function() {
         }
     }
     });
-  $(document).on('change keyup', '.column-filter', function() {
+
+     // Debounce helper
+    function debounce(fn, delay) {
+        let timeout;
+        return function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(fn.bind(this), delay);
+        }
+    }
+
+  $(document).on('change keyup', '.column-filter', debounce(function() {
         table.ajax.reload();
-    });
+    }, 400));
     const editableColumns = {
   /*'dateinvoiced':'date', 
   'duedate':'date',   */      
@@ -199,7 +221,7 @@ $(document).on('dblclick', '#paymentTable td', function () {
   // When losing focus or pressing Enter, save
   input.on('blur keypress', function (e) {
     console.log(e.key);
-if (e.type === 'keydown' && e.key === 'Escape') {
+if (e.key === 'Escape') {
         cell.text(oldValue);
         return;
     }
@@ -218,8 +240,7 @@ if (e.type === 'keydown' && e.key === 'Escape') {
         data: {
           id: rowData.id,
           field: colName,
-          value: newValue,
-          _csrf: yii.getCsrfToken()
+          value: newValue          
         },
         success: function (res) {
           if (res.success) {
@@ -262,7 +283,7 @@ if (e.type === 'keydown' && e.key === 'Escape') {
     $(document).on('click','.duplicate-btn', function(){
         const id = $(this).data('id');
         if (!confirm('Sigur doriți să duplicați această plată?')) return;
-        $.post(baseUrl + '/payment/duplicate', { id: id, _csrf: yii.getCsrfToken() }, function(res){
+        $.post(baseUrl + '/payment/duplicate', { id: id }, function(res){
             if(res.success){
                 alert('Plata a fost duplicată cu succes.');
                 table.ajax.reload(null, false);
@@ -276,7 +297,7 @@ if (e.type === 'keydown' && e.key === 'Escape') {
     $(document).on('click','.delete-btn', function(){
         const id = $(this).data('id');
         if (!confirm('Sigur doriți să ștergeți această plată?')) return;
-        $.post(baseUrl + '/payment/delete', { id: id, _csrf: yii.getCsrfToken() }, function(res){
+        $.post(baseUrl + '/payment/delete', { id: id }, function(res){
             if(res.success){
                 alert('Plata a fost ștearsă cu succes.');
                 table.ajax.reload(null, false);
@@ -284,9 +305,7 @@ if (e.type === 'keydown' && e.key === 'Escape') {
                 alert('Eroare: ' + res.message);
             }
         });
-    });
-
-    // Inline editing logic can stay as-is
+    });    
 });
 JS
 );

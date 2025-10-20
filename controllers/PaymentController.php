@@ -175,9 +175,31 @@ class PaymentController extends Controller
         $partener = $request->get('partener');       
         $query = Payment::find();        
         //apply filters 
-         if (!empty($dateinvoiced)) {
-        $query->andWhere(['dateinvoiced' => $dateinvoiced]);
-    }
+        $dateInvFrom = Yii::$app->request->get('dateinvoiced_from');
+        $dateInvTo   = Yii::$app->request->get('dateinvoiced_to');
+         if ($dateInvFrom) {
+                $query->andWhere(['>=','dateinvoiced' , $dateInvFrom]);
+            }
+        if ($dateInvTo) {
+                $query->andWhere(['<=','dateinvoiced' , $dateInvTo]);
+            }             
+        $dateDueFrom = Yii::$app->request->get('duedate_from');
+        $dateDueTo   = Yii::$app->request->get('duedate_to');
+         if ($dateDueFrom) {
+                $query->andWhere(['>=','duedate', $dateDueFrom]);
+            }
+        if ($dateDueTo) {
+                $query->andWhere(['<=','duedate' , $dateDueTo]);
+            } 
+        $datePayFrom = Yii::$app->request->get('paydate_from');
+        $datePayTo   = Yii::$app->request->get('paydate_to');
+         if ($datePayFrom) {
+                $query->andWhere(['>=','paymentdate', $datePayFrom]);
+            }
+        if ($datePayTo) {
+                $query->andWhere(['<=','paymentdate' , $datePayTo]);
+            } 
+
     if (!empty($duedate)) {
         $query->andWhere(['duedate' => $duedate]);
     }
