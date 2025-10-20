@@ -95,4 +95,21 @@ public function behaviors()
         return new PartnerQuery(get_called_class());
     }
 
+    public function beforeSave($insert) {
+    if(!parent::beforeSave($insert))
+    {
+        return false;
+    }
+    $this->name = trim($this->name);
+    if(!$insert)
+    {
+        $sql="
+        UPDATE invoice set partener =:newName WHERE partner_id=:partnerId;
+        ";     
+        $params=[':newName'=>$this->name,':partnerId'=>$this->id];
+        Yii::$app->db->createCommand($sql,$params)->execute();       
+    }
+    return true;
+    }
+    
 }
