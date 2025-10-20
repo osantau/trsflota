@@ -10,6 +10,14 @@ $this->registerCssFile($baseUrl.'/dataTables/1.13.6/css/jquery.dataTables.min.cs
 $this->registerJsFile($baseUrl.'/dataTables/1.13.6/js/jquery.dataTables.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 // $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css');
 // $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+// DataTables Buttons CSS & JS
+/*$this->registerCssFile($baseUrl.'/dataTables/buttons/2.4.1/css/buttons.dataTables.min.css');
+$this->registerJsFile($baseUrl.'/dataTables/buttons/2.4.1/js/dataTables.buttons.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile($baseUrl.'/dataTables/buttons/2.4.1/js/buttons.html5.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile($baseUrl.'/dataTables/buttons/2.4.1/js/buttons.print.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile($baseUrl.'/ajax/libs/jszip/3.10.1/jszip.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile($baseUrl.'/ajax/libs/pdfmake/0.2.7/pdfmake.min.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile($baseUrl.'/ajax/libs/pdfmake/0.2.7/vfs_fonts.js', ['depends' => [\yii\web\JqueryAsset::class]]); */
 $this->registerCss(" 
     #vehicleTable tbody td:nth-child(2)  {
         cursor: pointer;
@@ -124,7 +132,34 @@ var table=  $('#vehicleTable').DataTable({
     } */
         },
         order:[[10,'asc']],
-        ajax: baseUrl+'/vehicle/data',            
+        ajax: baseUrl+'/vehicle/data',    
+       /*  dom: 'Bfrtip', // Add this line to enable buttons
+    buttons: [       
+            {
+            extend: 'excel',
+            text: '<i class="fa fa-file-excel"></i>',   
+            title: 'Camioane_Export_' + new Date().toISOString().slice(0,10).replace(/-/g,''), // YYYYMMDD
+            exportOptions: {    
+                columns: ':visible:not(:last-child)'
+            }
+        },
+        {
+            extend: 'pdf',
+            text: '<i class="fa fa-file-pdf"></i>',
+            title: 'Camioane_Export_' + new Date().toISOString().slice(0,10).replace(/-/g,''),
+            exportOptions: {
+                columns: ':visible:not(:last-child)'
+            }
+        },      
+        {
+            extend: 'print',
+            text: '<i class="fa fa-print"></i>',
+            title: 'Camioane_Export_' + new Date().toISOString().slice(0,10).replace(/-/g,''),
+            exportOptions: {
+                columns: ':visible:not(:last-child)'
+            }
+        }
+    ], */        
      columns: [  
         {data: 0, visible: false,orderable: false },   //ID      
         {data: null, orderable: false // Contor
