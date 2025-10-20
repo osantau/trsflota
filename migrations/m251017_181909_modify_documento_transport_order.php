@@ -30,6 +30,7 @@ class m251017_181909_modify_documento_transport_order extends Migration
         ALTER TABLE `trsflota`.`transport_order` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
         ALTER TABLE `trsflota`.`user` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
         ALTER TABLE `trsflota`.`vehicle` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `transport_order` CHANGE `dateordered` `dateordered` DATE NULL DEFAULT NULL;
         ");      
     }
 
