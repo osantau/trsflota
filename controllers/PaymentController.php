@@ -231,6 +231,7 @@ class PaymentController extends Controller
             'mentiuni'=> $p->mentiuni,
             'ron'=>$p->ron,
             'eur'=>$p->eur,
+            'status'=>$p->getPaid(),
         ];
     }
 

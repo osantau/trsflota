@@ -34,6 +34,11 @@ use app\models\Payment;
            ,['prompt'=>''])->label('Termen Incasare') 
             ?>
         </div>
+         <div class="col-md-4">
+           <?= $form->field($model, 'paid_status')->dropDownList(Payment::getPaidStatus() 
+           ,['prompt'=>''])->label('Stare Achitare') 
+            ?>
+        </div>
     </div>
     <div class="row">
         <div class="col-md-4">

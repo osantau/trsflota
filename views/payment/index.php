@@ -15,7 +15,15 @@ $this->registerCss("
             filter: brightness(1.08) saturate(1.4);
             box-shadow: 0 0 10px rgba(150, 80, 255, 0.5);
             cursor: pointer;
-            }"
+            }
+            .status-paid {
+    background-color: rgba(60, 179, 113, 0.25) !important; /* green */
+}
+
+.status-pending {
+    background-color: rgba(255, 215, 0, 0.25) !important; /* yellow */
+}
+            "
 );
 $this->title = 'Plati Parteneri';
 $baseUrl = Url::base(true);
@@ -50,7 +58,8 @@ $baseUrl = Url::base(true);
               <th>Cont EUR</th>
               <th>Data Achitarii</th>
               <th>Banca</th>
-              <th>Mentiuni</th>            
+              <th>Mentiuni</th>     
+              <th>Platit</th>       
               <th>Actiuni</th>
             </tr>    
         </thead>
@@ -84,7 +93,7 @@ $(document).ready(function() {
           }
         }, // server-side URL
         ordering: true,
-        autoWidth: false,
+        autoWidth: true,
         responsive: true,        
         columns: [
             { data : 'id', visible:false },
@@ -104,6 +113,7 @@ $(document).ready(function() {
             { data : 'paymentdate', orderable:false },
             { data : 'bank', orderable:false },
             { data : 'mentiuni', orderable:false },
+            { data : 'status',orderable:false },
             { data: null, orderable:false,
                 render: function(data, type, row) {
                     const editUrl = baseUrl + '/payment/update?id=' + row.id;
@@ -119,7 +129,20 @@ $(document).ready(function() {
         order: [[1, 'desc']],
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json'
+        },
+        rowCallback: function(row, data) {
+        $(row).removeClass('status-paid status-pending');
+        if (data.status) {
+            const status = data.status.toLowerCase();
+            if (status === 'total') {
+                $(row).addClass('status-paid');
+            } else if (status === 'partial') {
+                $(row).addClass('status-pending');
+            } /*else if (status === 'neplatit' || status === 'overdue' || status === 'unpaid') {
+                $(row).addClass('status-overdue');
+            } */
         }
+    }
     });
   $(document).on('change keyup', '.column-filter', function() {
         table.ajax.reload();
