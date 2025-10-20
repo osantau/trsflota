@@ -32,27 +32,27 @@ $this->title = 'Comenzi';
 
             // 'id',
             'documentno',
-            ['attribute'=>'dateordered','format' => ['datetime', 'php:d.m.Y']],
-            ['attribute'=>'partnerName','value'=> 'partner.name','label'=>'Client'],
+           // ['attribute'=>'dateordered','format' => ['datetime', 'php:d.m.Y']],
+          //  ['attribute'=>'partnerName','value'=> 'partner.name','label'=>'Client'],
             ['attribute' => 'created_at', 'format' => ['datetime', 'php:d.m.Y H:i']],
-            ['attribute'=>'status',
+         /*   ['attribute'=>'status',
              'value'=>function($model){
                
                 return $model->getStatusName();
              },
              'filter'=>[TransportOrder::getStatusList()],
-            ],
+            ], */
             //'updated_at',
             //'created_by',
             //'updated_by',
-            [
+           /* [
                 'header'=>'Actiuni',
                 'template'=>'{update} {delete}',
                 'class' => ActionColumn::class,
                 'urlCreator' => function ($action, TransportOrder $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
-            ],
+            ],*/
         ],
     ]); ?>
 
