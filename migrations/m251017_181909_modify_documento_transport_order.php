@@ -9,19 +9,28 @@ class m251017_181909_modify_documento_transport_order extends Migration
      */
     public function safeUp()
     {
-        $this->dropForeignKey('fk_vehicle_transport_order','{{%vehicle}}');
-        $this->dropTable('{{%transport_order}}');
-        $this->createTable('{{%transport_order}}', [
-             'id' => $this->primaryKey(),
-             'documentno' => $this->string(2000)->defaultValue(null),
-             'dateordered'=>$this->date()->defaultValue(null),
-             'partner_id' => $this->integer(11)->defaultValue(null),             
-             'created_at' => $this->integer(11)->defaultValue(null),
-             'updated_at' => $this->integer(11)->defaultValue(null),
-             'created_by'=>$this->integer(11)->defaultValue(null),
-             'updated_by'=> $this->integer(11)->defaultValue(null),
-             
-        ]);       
+        $this->dropForeignKey('fk_vehicle_transport_order','{{%vehicle}}');       
+        $this->dropIndex('idx_unique_documento_dateordered_partner_id','{{%transport_order}}');        
+        // $this->dropIndex('idx_partner_id','{{%transport_order}}');
+        $this->alterColumn('{{%transport_order}}','documentno','varchar(500)'); 
+        $this->execute("
+        ALTER DATABASE trsflota CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`cities` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`countries` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`driver` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`invoice` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`location` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`migration` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`partner` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`payment` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`regions` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`session` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`states` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`subregions` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`transport_order` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`user` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ALTER TABLE `trsflota`.`vehicle` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+        ");      
     }
 
     /**
