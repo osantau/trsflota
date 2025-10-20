@@ -49,6 +49,11 @@ use app\models\Partner;
     'pluginOptions'=>['allowClear'=>true]
 ],)->label('Partener') ?>
         </div>      
+        <div class="col-md-4">
+              <?= $form->field($model, 'paid_status')->dropDownList(Invoice::getPaidStatus() 
+           ,['prompt'=>''])->label('Incasat') 
+            ?>
+        </div>
     </div>
     <?php if($moneda==='eur') { ?>
     <div class="row">

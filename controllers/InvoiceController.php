@@ -243,6 +243,7 @@ class InvoiceController extends Controller
                 'mentiuni' => $p->mentiuni,
                 'credit_note' => $p->credit_note,
                 'diferenta' => $p->diferenta,
+                'status'=> $p->getPaid(),
             ];
         }
 

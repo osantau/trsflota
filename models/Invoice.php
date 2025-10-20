@@ -196,4 +196,8 @@ class Invoice extends \yii\db\ActiveRecord
             1=>'Total',];
     }
 
+    public function getPaid(){
+        return $this->getPaidStatus()[$this->paid_status]??'';
+    }
+
 }

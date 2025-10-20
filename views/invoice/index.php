@@ -24,7 +24,15 @@ $this->registerCss("
             filter: brightness(1.08) saturate(1.4);
             box-shadow: 0 0 10px rgba(150, 80, 255, 0.5);
             cursor: pointer;
-            }"
+            }
+             .status-paid {
+    background-color: rgba(60, 179, 113, 0.25) !important; /* green */
+}
+
+.status-pending {
+    background-color: rgba(255, 215, 0, 0.25) !important; /* yellow */
+}
+            "
 );
 $this->title = 'Facturi ' . strtoupper($moneda);
 $baseUrl = Url::base(true);
@@ -55,7 +63,8 @@ $baseUrl = Url::base(true);
                     <th>Suma Achitata</th>
                     <th>Sold</th>
                     <th>Data Incasare</th>
-                    <th>Mentiuni</th>
+                    <th>Incasat</th>
+                    <th>Mentiuni</th>                    
                     <th>Actiuni</th>
                 </tr>
             </thead>
@@ -71,8 +80,9 @@ $baseUrl = Url::base(true);
                         <th>Suma Achitata</th>
                         <th>Sold</th>
                         <th>Data Incasare</th>
+                        <th>Incasat</th>
                         <th>Diferenta</th>
-                        <th>Credit Note</th>
+                        <th>Credit Note</th>                        
                         <th>Actiuni</th>
                     </tr>
                 </thead>
@@ -173,6 +183,7 @@ $(document).ready(function() {
     }
 
     columns.push({ data: 'paymentdate' });
+    columns.push({ data: 'status' });
 
     if (moneda === 'eur') {
         columns.push({ data: 'diferenta', orderable: false });
@@ -214,7 +225,21 @@ $(document).ready(function() {
         order: [[1, 'desc']],
         language: {
             url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/ro.json'
+        },
+           rowCallback: function(row, data) {
+        $(row).removeClass('status-paid status-pending status-overdue');
+        if (data.status) {
+            const status = data.status.toLowerCase();
+            if (status === 'total') {
+                $(row).addClass('status-paid');
+            } else if (status === 'partial') {
+                $(row).addClass('status-pending');
+            } /*else if (status === 'neplatit' || status === 'overdue' || status === 'unpaid') {
+                $(row).addClass('status-overdue');
+            }*/
         }
+    }
+
     });
 
     // Refresh button
