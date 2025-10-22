@@ -80,8 +80,8 @@ $(document).ready(function() {
         let input = '';
         if (colName === 'Data Factura' || colName === 'Data Scadenta') {
             input = '<div style="display:flex; flex-direction:column;">'
-            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' From" />'
-            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' To" />'
+            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' From" title="Data Inceput" />'
+            +'<input type="date" class="form-control form-control-sm column-filter" placeholder="'+colName+' To" title="Data Sfarsit" />'
             +'</div>';
         } else if (colName === 'FURNIZOR') {
             input = '<input type="text" class="form-control form-control-sm column-filter" placeholder="Caută partener..." />';
