@@ -123,7 +123,7 @@ class TransportOrder extends \yii\db\ActiveRecord
     public function beforeSave($insert){
      
       if(parent::beforeSave($insert)){                       
-         $this->dateordered =Yii::$app->formatter->asDatetime($this->dateordered,'php:Y-m-d');         
+        //  $this->dateordered =Yii::$app->formatter->asDatetime($this->dateordered,'php:Y-m-d');         
                
         return true;     
     }            

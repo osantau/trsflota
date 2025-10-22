@@ -214,42 +214,30 @@ public function actionInfoAjax()
             return ['success'=>true];
         } 
         
-    if($cId>0)
-    {
-    $order = TransportOrder::findOne($cId); 
-    } else {
-    $order = TransportOrder::findOne(['documentno'=>$documentno]);   
-    }
-    if ($order !==null)
-    {                          
-         $sql = "
-         UPDATE `transport_order` set `documentno`=:documentno WHERE `id`=:id;
-         ";
-          Yii::$app->db->createCommand($sql)
-          ->bindValue(':documentno',$documentno)
-          ->bindValue(':id',$cId)
-          ->execute();
-                            
-    } else {
-            $sql = "
-INSERT INTO `transport_order`
-(`documentno`, `dateordered`, `partner_id`, `status`, `created_by`, `created_at`, `updated_by`, `updated_at`)
-VALUES
-(:documentno, NULL, :partner_id, 0, :created_by, UNIX_TIMESTAMP(), NULL, UNIX_TIMESTAMP())
-";
+        $transaction = Yii::$app->db->beginTransaction();
+try {
+    // Create order
+    $order = new TransportOrder([
+        'documentno' => $documentno,
+        'partner_id' => $partnerId,        
+        'status' => 0,
+        'created_by' => $userId,
+        'created_at' => time(),
+        'updated_at' => time(),
+    ]);
+    $order->save(false);
 
-            Yii::$app->db->createCommand($sql)
-                ->bindValue(':documentno', $documentno)
-                ->bindValue(':partner_id', $partnerId)
-                ->bindValue(':created_by', $userId)
-                ->execute();
-            $vehicle->status=1;                              
-            $vehicle->transport_order_id=Yii::$app->db->getLastInsertID();
-            $vehicle->save();         
-    }       
-    
+    // Update vehicle
+    $vehicle->transport_order_id = $order->id;
+    $vehicle->status=1;
+    $vehicle->save(false);
 
+    $transaction->commit();
     return ['success' => true];
+} catch (\Throwable $e) {
+    $transaction->rollBack();
+    return ['success' => false, 'error' => $e->getMessage()];
+}   
 }
 
 }

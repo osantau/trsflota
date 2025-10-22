@@ -365,12 +365,15 @@ var table=  $('#vehicleTable').DataTable({
         });
 
         // salveaza comanda
-    $('#editComandaModal').on('submit', function(e) {
+    $('#editComandaForm').off('submit').on('submit', function(e) {
     e.preventDefault();
-    $.ajax({
-        url: baseUrl+'/transport-order/info-ajax',
+    let form=$(this);    
+    let submitBtn = form.find('button[type="submit"]');
+    submitBtn.prop('disabled', true);
+       $.ajax({
+        url: baseUrl + '/transport-order/info-ajax',
         method: 'POST',
-        data: $('#editComandaForm').serialize(),
+        data: form.serialize(),
         success: function(response) {
             if (response.success) {
                 // Close modal
@@ -382,6 +385,10 @@ var table=  $('#vehicleTable').DataTable({
             } else {
                 alert(response.message);
             }
+        },
+        complete: function() {
+            // Re-enable button
+            submitBtn.prop('disabled', false);
         }
     });
 });
