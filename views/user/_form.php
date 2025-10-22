@@ -35,7 +35,8 @@ use kartik\password\PasswordInput;
     <?= $form->field($model, 'is_admin')->dropDownList(User::getAdminList(),['label'=>"Administrator?"] )?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Salveaza', ['class' => 'btn btn-success']) ?>
+		<?= Html::a('Renunta',['/user'], ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
