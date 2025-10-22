@@ -224,6 +224,7 @@ try {
         'created_by' => $userId,
         'created_at' => time(),
         'updated_at' => time(),
+        'regno'=>$vehicle->regno,
     ]);
     $order->save(false);
 

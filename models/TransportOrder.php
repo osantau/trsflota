@@ -16,7 +16,7 @@ use app\models\Vehicle;
  * @property int $updated_at
  * @property int $created_by
  * @property int $updated_by
- *
+ * @property string $regno
  * @property User $createdBy
  * @property Partner $partner
  * @property User $updatedBy
@@ -54,6 +54,8 @@ class TransportOrder extends \yii\db\ActiveRecord
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['updated_by' => 'id']],
             [['status'],'integer'],
             [['status'],'default','value'=>self::STATUS_NEALOCAT],
+            [['regno'],'string'],
+            [['regno'],'default','value'=>null],
         ];
     }
 
