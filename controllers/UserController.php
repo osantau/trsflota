@@ -88,7 +88,7 @@ class UserController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect('/user');
+                return $this->redirect(['/user']);
             }
         } else {
             $model->loadDefaultValues();
@@ -111,7 +111,7 @@ class UserController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect('/user');
+            return $this->redirect(['/user']);
         }
 
         return $this->render('update', [
