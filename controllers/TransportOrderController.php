@@ -205,12 +205,9 @@ public function actionInfoAjax()
     $remove_cmd=Yii::$app->request->post('remove_cmd');    
     if($remove_cmd==1)
         {
-            $sql="
-            UPDATE vehicle set transport_order_id=null, status=0 WHERE id=:id;            
-            ";
-            Yii::$app->db->createCommand($sql)            
-            ->bindValue(':id',$v_id)
-            ->execute();
+          $vehicle->status=0;
+          $vehicle->transport_order_id=null;
+          $vehicle->save();
             return ['success'=>true];
         } 
         

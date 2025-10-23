@@ -392,13 +392,16 @@ var table=  $('#vehicleTable').DataTable({
         }
     });
 });
-   $('#editComandaModal').on('click','#btn-delete-order', function(e) {
+   $('#editComandaForm').off('click','#btn-delete-order').on('click','#btn-delete-order', function(e) {
     e.preventDefault();    
     $('#remove_cmd').val(1);    
    $.ajax({
         url: baseUrl+'/transport-order/info-ajax',
         method: 'POST',
         data: $('#editComandaForm').serialize(),
+          headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
         success: function(response) {
             if (response.success) {
                 // Close modal
@@ -410,6 +413,9 @@ var table=  $('#vehicleTable').DataTable({
             } else {
                 alert(response.message);
             }
+        },
+        error: function(xhr) {
+            alert('An error occurred: ' + xhr.status + ' ' + xhr.statusText);
         }
     });
 });
