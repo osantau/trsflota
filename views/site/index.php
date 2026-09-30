@@ -1,7 +1,7 @@
 <?php
 
 /** @var yii\web\View $this */
-
+use yii\helpers\Html;
 $this->title = Yii::$app->name;
 ?>
 <div class="site-index">
@@ -12,7 +12,7 @@ $this->title = Yii::$app->name;
     
       <?php if (Yii::$app->user->isGuest): ?>
            <p>Pentru a utiliza aceasta aplicatie trebuie sa va autentificati !</p>
-      <a href="/site/login" class="btn btn-lg btn-success">Autentificare</a>
+		   <?= Html::a('Autentificare', ['/site/login'], ['class' => 'btn btn-lg btn-success']) ?>      
       <?php else: ?>
            <p>Sunteti deja autentificat !</p>
       <a href="/site/logout" data-method="post" class="btn btn-lg btn-danger">Deconectare</a>
