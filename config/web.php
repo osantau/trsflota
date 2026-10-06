@@ -18,6 +18,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'eGgiwicEt8edz_3lupwA1x_SZWeC1DH_',
+			'baseUrl' =>'/trsflota',
         ],
         'redis' => [
             'class' => 'yii\redis\Connection',
