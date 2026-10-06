@@ -15,7 +15,7 @@ $this->title = Yii::$app->name;
 		   <?= Html::a('Autentificare', ['/site/login'], ['class' => 'btn btn-lg btn-success']) ?>      
       <?php else: ?>
            <p>Sunteti deja autentificat !</p>
-      <a href="/site/logout" data-method="post" class="btn btn-lg btn-danger">Deconectare</a>
+      <?= Html::a('Deconectare',['/site/logout'],['class'=>'btn btn-lg btn-danger','data'=>['method'=>'post']])?>
       <?php endif; ?>
 </div>
    </div>   
